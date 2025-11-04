@@ -1,5 +1,7 @@
 <?php
 
+use App\Helpers\ApiResponse;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,3 +16,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('unauthorized', function () {
+    return ApiResponse::unauthorized();
+})->name('login');

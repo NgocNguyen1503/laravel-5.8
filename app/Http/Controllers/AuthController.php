@@ -23,8 +23,9 @@ class AuthController extends Controller
                 return ApiResponse::dataNotfound('User not found. Please check your infomation.');
             }
             $user = Auth::user();
+            $token = $user->createToken($user->email)->accessToken;
 
-            return ApiResponse::success(compact('user'));
+            return ApiResponse::success(compact('user', 'token'));
         } catch (\Throwable $th) {
             Log::error($th);
 
