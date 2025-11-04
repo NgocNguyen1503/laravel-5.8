@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\ApiResponse;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -13,12 +14,21 @@ class AuthController extends Controller
     function login(Request $request)
     {
         try {
-            return ApiResponse::success("login");
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-            return ApiResponse::internalServerError([
-                'error' => $th->getMessage()
+            $validated = $request->validate([
+                'email' => ['required', 'email'],
+                'password' => ['required'],
             ]);
+
+            if (!Auth::attempt($validated)) {
+                return ApiResponse::dataNotfound('User not found. Please check your infomation.');
+            }
+            $user = Auth::user();
+
+            return ApiResponse::success(compact('user'));
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            return ApiResponse::internalServerError($th->getMessage());
         }
     }
 
