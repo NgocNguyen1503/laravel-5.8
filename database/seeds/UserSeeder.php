@@ -44,7 +44,9 @@ class UserSeeder extends Seeder
             DB::table('users')->insert([
                 'name' => $this->names[$i],
                 'email' => $this->emails[$i],
-                'password' => Hash::make("12345678")
+                'password' => Hash::make("12345678"),
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
         }
     }
